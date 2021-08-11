@@ -1,0 +1,116 @@
+'''
+PROYECTO FINAL
+Porgramar un sistema indicador de color de semaforo COVID
+    *Tener una bd.csv con edad, indicador [0, 1]
+    *Si el indicador es menor que 0.8 no tiene covid
+    *Si el indicador es mayor o igual a 0.8 tiene covid
+    *La muestra sera a 100 individuos
+    *Calcular el color del semaforo COVID en torno a:
+        VERDE: 0 individuos con COVID
+        AMARILLO: 1-30 individuos con COVID
+        NARANJA: 31-70 individuos con COVID
+        ROJO: 71-100 individuos con COVID
+    CALCULA LA EDAD PROMEDIO DE LAS PERSONAS CON COVID
+'''
+
+#SE DEFINEN LAS LISTAS PARA CADA DATO QUE SE VAYA A PROPORCIONAR
+'''
+n = NOMBRE
+e = EDAD
+C = COVID
+d = DATOS
+r = RESULTADO DEL PACIENTE
+t = TOTAL
+i = ITERADOR
+'''
+
+n = []
+e = []
+c = []
+d = []
+
+#SE DEFINE UN ITERADOR
+
+i=1
+
+print("\n\tBienvenido a la base de datos del sistema indicador de color de semáforo COVID")
+
+print("\nSintomas para detectar el covid")
+print("\n\tFiebre \n\tTos seca \n\tCansancicio \n\tMolestias y Dolores")
+print("\ttDolor de garganta \n\tDificultad para respirar \n\tDolor o presion en el pecho")
+print("\tIncapacidad de moverse o hablar \n\tPerdida del olfato o el gusto")
+
+#SE DEFINE UN BUCLE PARA SOLO 100 PERSONAS PERO TAMBIEN PUEDE SER EL QUE USUARIO DESEE
+
+paciente = float(input("\nIngrese el numero de pacientes: "))
+
+while i <= paciente:
+    nombre = input("\n"+str(i)+".-"+"Ingrese su nombre: ") #SE ALMACENAN EL NOMBRE, EDAD Y SI PUEDE QUE TENGA COVID
+    edad = int(input("Ingrese su edad: "))
+    covid = float(input("Elija [0] si el paciente no ha presentado estos sintomas o elija [1] en caso de presentarlos: "))
+
+    if covid < 0.8: #SE CREA ESTE IF PARA SABER SI TIENE O NO COVID EL PACIENTE
+        reg4 = nombre + ',' + str(edad) + ',' + "NO tiene COVID" + '\n'
+    else:
+        reg4 = nombre + ',' + str(edad) + ',' + "SI tiene COVID" + '\n'
+
+    reg = nombre
+    reg2 = edad
+    reg3 = covid
+
+
+
+    #INGRESAMOS LOS DATOS A SU RESPECTIVA LISTA
+
+    n.append(reg)
+    e.append(reg2)
+    c.append(reg3)
+    d.append(reg4)
+
+    i += 1
+#SE SACA EL PROMEDIO DE LA EDAD DE LOS PACIENTES
+mean = sum(e)/len(e)
+print("\n"+ str(d))
+
+print("\nEl promedio de edad es: " + str(mean))
+print("\n")
+
+print()
+
+#MUESTRA CUANTOS PACIENTES SON Y EL NUMERO DE INFECTADOS
+print("Numero de pacientes en total", int(paciente))
+print("Numero de pacientes que NO tienen COVID: " +str(c.count(0)))
+print("Numero de pacientes que SI tienen COVID: " +str(c.count(1)))
+
+semaforo = int(input("\nEscribe el numero de pacientes con COVID: "))
+
+if semaforo == 0:
+    print("EL SEMAFORO ES VERDE")
+elif 0 < semaforo <= 30:
+    print("EL SEMAFORO ES AMARILLO")
+elif 30 < semaforo <= 70:
+    print("EL SEMAFORO ES NARANJA")
+elif 70 < semaforo <= 100:
+    print("EL SEMAFORO ES ROJO ")
+else:
+    print("NO DIGITO UNA OPCION VALIDA")
+
+#AQUI SE MANDAS LOS DATOS AL DOCUMENTO Y SE IMPRIMEN EN PANTALLA
+
+print(d)
+a = open("bd.csv", "a")
+a.writelines(d)
+a.close()
+
+a = open("bd.csv", "r")
+contenido = a.read()
+a.close()
+print()
+print(contenido)
+
+'''
+tomaremos que la mitad de las personas tienen 19 y la otra mida 22
+y que la mitad de las personas tiene COVID y la otra mitad no
+nos deberia dar un promedio de edad de 20.5 
+y un semaforo NARANJA
+'''
