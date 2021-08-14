@@ -1,0 +1,194 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+
+/*
+PROGRAMA PARA EL REGISTRO DE VACUNAS CONTRA EL COVID
+
+Datos
+
+infante
+Juan 
+edad: 5
+email: juan@gmail.com
+numero: 1234567890
+mes de mayo 2022
+
+niño
+Carlos
+edad:8
+email: carlos@gmail.com
+numero: 1234567890
+mes de abril 2022
+
+joven
+Miguel
+edad: 15
+email: miguel@gmail.com
+numero: 1234567890
+mes de marzo 2022
+
+adulto
+Cesar
+edad: 30
+email: cesar@gmail.com
+numero: 1234567890
+mes de febrero del 2022
+
+tercera edad
+luis 
+edad: 60
+email: luis@gmail.com
+numero: 123456789
+mes de enero del 2022
+*/
+
+//Se crea el nodo donde se le va asignar el dato que queremos insertar
+typedef struct nodo{
+	char nombre[20];
+	int edad;
+	double numero;
+	char email[50];
+	nodo*siguiente; 
+}nodo;
+
+//Se asignan los punteros frente y fin hacia el nuevo nodo
+typedef struct cola{
+	nodo*frente = NULL; //Por el momento se encuentra vacia
+	nodo*fin = NULL;
+}cola;
+
+//Se crean las prototipos de las funciones 
+void iniciar(struct cola &);
+void encolar(struct cola &, struct nodo);
+struct nodo desencolar(struct cola&);
+void vercola(struct cola);
+
+int main(){
+	int n, i;
+	
+	//Se almacenaran los datos
+	struct nodo cte; 
+	
+	//Se va definir los elementos que guardara cada seccion de la cola
+ 	struct cola q; 
+ 	struct cola qI;//infantes
+ 	struct cola qN;//niños
+ 	struct cola qJ;//jovenes
+ 	struct cola qA;//adolescentes
+	struct cola qPT;//personas de tercera edad
+	
+	iniciar(q);// Esta funcion va servir para guardar todos los datos al principio
+	
+	//Estas funciones van a guardar los datos de cuerdo como se clasificaron
+ 	iniciar(qI);//infantes
+ 	iniciar(qN);//niños
+ 	iniciar(qJ);//jovenes
+ 	iniciar(qA);//adultos
+ 	iniciar(qPT);//personas de tercera edad
+ 	
+ 	printf("\n\t***BIENVENIDO AL REGISTRO DE VACUNAS CONTRA EL COVID");
+ 	printf("\n\nESTE PROGRAMA INDICARA QUE MES Y AÑO LE TOCARA VACUNARSE ");
+ 	printf("\n\nINGRESE EL NUMERO DE PERSONAS: ");
+	scanf("%d", &n);
+	
+	
+	//Se crea un bucle para agrgar los datos del numeor de personas que nosotros deseemos
+	for(i = 0; i<n; i++){
+		fflush(stdin);// sirve para evitar un error al ingresar los datos
+		printf("\nNombre: ");
+		gets(cte.nombre);
+		printf("Edad: ");
+		scanf("%d", &cte.edad);
+		printf("Ingrese su correo electronico: ");
+		fflush(stdin);
+		gets(cte.email);
+		printf("Ingrese su numero de telefono: ");
+		scanf("%i", &cte.numero);
+		encolar(q, cte);//Permite agregar los elementos
+	}
+	
+	printf("\n\t\tCOLA ORIGINAL\n");
+	vercola(q);// Nos muestra los datos
+	
+	while(q.frente!=NULL){
+		
+		//Se crea este ciclo para asignar a que categoria pertenece cada persona y que fechar de vacunacion le corresponde
+		cte=desencolar(q);
+  		if(cte.edad>0 && cte.edad<=6)
+		encolar(qI,cte);
+  		if(cte.edad>6 && cte.edad<=12)
+   		encolar(qN,cte);
+  		if(cte.edad>12 && cte.edad<=23)
+  		encolar(qJ,cte);
+  		if(cte.edad>23 && cte.edad<=50)
+	  	encolar(qA,cte);
+  		if(cte.edad>50)
+	  	encolar(qPT,cte);
+	  	
+	}
+	
+	printf("\n\n\t***Infantes***\n");
+	vercola(qI);
+	printf("\nMAYO 2022");
+	printf("\n\n\t**Ninios***\n");
+	vercola(qN);
+	printf("\nABRIL 2022");
+	printf("\n\n\t***Jovenes***\n");
+	vercola(qJ);
+	printf("\nMARZO 2022");
+	printf("\n\n\t***Adultos***\n");
+	vercola(qA);
+	printf("\nFEBRERO 2022");
+	printf("\n\n\t***Personas de tercera edad***\n");
+	vercola(qPT);
+	printf("\nENERO 2022");
+	
+	getch();
+	
+	return 0;
+}
+//Sirve para estrablecer el rango 
+void iniciar(struct cola&q){
+	q.frente=NULL;
+  	q.fin=NULL;
+}
+
+//Se guardaran los datos en la cola
+void encolar(struct cola &q,struct nodo cte){
+	nodo*p;
+    p=new(struct nodo);//Asignamos memoria para un obejeto
+    *p=cte;
+    p->siguiente=NULL;
+    if(q.frente==NULL)//Sirve para ir abjuntado cada uno de lso elementos
+    q.frente=p;
+    else (q.fin)->siguiente=p;
+    q.fin=p;
+}
+
+//Sirve para sacar elemento por elemento
+struct nodo desencolar(struct cola&q){
+	nodo*p;
+    p=q.frente;
+    nodo n=*p;
+    q.frente=(q.frente)->siguiente; 
+    delete(p);//dasasigna memoria
+    return n;
+}
+
+//Nos muestra los datos
+void vercola(struct cola q){
+	
+	nodo*p;
+    p=q.frente;
+    //Este ciclo permite ver todos los datos
+    while(p!=NULL){
+    	printf("\n%s",p->nombre);
+    	printf("\n%d",p->edad );
+    	printf("\n%s", p->email);
+    	printf("\n%i", p->numero);
+    	printf("\n");
+    	
+    	p=p->siguiente; //Permite acceder a elementos
+    }
+}
